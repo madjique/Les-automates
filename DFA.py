@@ -50,24 +50,18 @@ class AutomateEtatFini:
             if st in self.etatsFinals :
                 return True
             else :
-                if (st,'b') in self.transition_function.keys()  :
-                    suivb = self.transition_function[(st,'b')]
-                    if (st != suivb ) :
-                        vb = verifCoAcess(suivb)
-                    else : 
-                        vb= False
-                else :
-                    vb = False
-                
-                if (st,'a') in self.transition_function.keys() :
-                    suiva = self.transition_function[(st,'a')]
-                    if (st != suiva) :   
-                        va = verifCoAcess(suiva)
+                lastv = False
+                for x in self.alphabet :
+                    if (st,x) in self.transition_function.keys()  :
+                        suiv = self.transition_function[(st,x)]
+                        if (st != suiv ) :
+                            v = verifCoAcess(suiv)
+                        else : 
+                            v= False
                     else :
-                        va = False
-                else :
-                    va = False
-                return va or vb
+                        v = False
+                    lastv=lastv or v
+                return lastv
             
         #on cherche les etat non co-accessible
         coacces= []
@@ -79,14 +73,13 @@ class AutomateEtatFini:
         for st in transitionEtat:
             if st not in accessible or st  not in coacces:
                 self.etats.remove(st)
-                if (st,'a') in self.transition_function.keys() :
-                    del self.transition_function[(st,'a')]
-                if (st,'b') in self.transition_function.keys() :
-                    del self.transition_function[(st,'b')]
+                for x in self.alphabet :
+                    if (st,x) in self.transition_function.keys() :
+                        del self.transition_function[(st,x)]
         pass
 
     def miroir(self, parameter_list):
-        
+      
         pass
 
 
