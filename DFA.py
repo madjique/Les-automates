@@ -62,7 +62,6 @@ class AutomateEtatFini:
                         v = False
                     lastv=lastv or v
                 return lastv
-            
         #on cherche les etat non co-accessible
         coacces= []
         for x in self.etats :
@@ -73,22 +72,34 @@ class AutomateEtatFini:
         for st in transitionEtat:
             if st not in accessible or st  not in coacces:
                 self.etats.remove(st)
+                if st in self.etatsFinals :
+                    self.etatsFinals.remove(st)
                 for x in self.alphabet :
                     if (st,x) in self.transition_function.keys() :
                         del self.transition_function[(st,x)]
         pass
 
-    def miroir(self, parameter_list):
-      
+    def miroir(self):
+        newInstru = {}
+        for st in self.etats :
+            for x in self.alphabet :
+                if (st,x) in self.transition_function.keys() :
+                    elt = self.transition_function[(st,x)]
+                    newInstru[(elt,x)]=st
+        self.transition_function.clear()
+        for x in newInstru.keys():
+            self.transition_function[x] = newInstru[x]
         pass
 
+
+#__main__
 
 #initialisation des etats et de l'alphabet
 
 etats = {'q0','q1','q2','q3','q4'}
 alphabet = {'a','b'}
 etatInitiale = 'q0'
-etatFinale = {'q0','q2'}
+etatFinale = {'q0','q2','q3'}
 
 #parametrage des instructions
 
@@ -107,15 +118,22 @@ execution = AutomateEtatFini(etats, alphabet, Instructions, etatInitiale, etatFi
 
 #la lecture en entrée
 inp_program = tuple('aba')
-
+print("Reconnaisance du mot ... ")
 #affichage de l'execution
-
-#print(execution.run_with_input_list(inp_program))
+print("Mot reconnu : ")
+print(execution.run_with_input_list(inp_program))
 
 #transformation en automate reduit
 
 execution.Reduction()
+print("Trace après Reduction")
 print(etats)
 print(Instructions)
+print(etatFinale)
 
 #transformation miroir
+execution.miroir()
+print("Trace apres Miroir")
+print(etats)
+print(Instructions)
+print(etatFinale)
