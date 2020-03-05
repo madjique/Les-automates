@@ -93,47 +93,48 @@ class AutomateEtatFini:
 
 
 #__main__
-
+if __name__ == "__main__":    
 #initialisation des etats et de l'alphabet
 
-etats = {'q0','q1','q2','q3','q4'}
-alphabet = {'a','b'}
-etatInitiale = 'q0'
-etatFinale = {'q0','q2','q3'}
+    etats = {'q0','q1','q2','q3','q4'}
+    alphabet = {'a','b'}
+    etatInitiale = 'q0'
+    etatFinale = {'q0','q2','q3'}
 
-#parametrage des instructions
+    #parametrage des instructions
 
-Instructions = {}
-Instructions[('q0','a')] = 'q0'
-Instructions[('q0','b')] = 'q1'
-Instructions[('q1','a')] = 'q2'
-Instructions[('q1','b')] = 'q0'
-Instructions[('q2','a')] = 'q2'
-Instructions[('q3','a')] = 'q3'
-Instructions[('q3','b')] = 'q4'
+    Instructions = {}
+    Instructions[('q0','a')] = 'q0'
+    Instructions[('q0','b')] = 'q1'
+    Instructions[('q1','a')] = 'q2'
+    Instructions[('q1','b')] = 'q0'
+    Instructions[('q2','a')] = 'q2'
+    Instructions[('q3','a')] = 'q3'
+    Instructions[('q3','b')] = 'q4'
 
-#execution de l'automate 
+    #execution de l'automate 
 
-execution = AutomateEtatFini(etats, alphabet, Instructions, etatInitiale, etatFinale)
+    execution = AutomateEtatFini(etats, alphabet, Instructions, etatInitiale, etatFinale)
 
-#la lecture en entrée
-inp_program = tuple('aba')
-print("Reconnaisance du mot ... ")
-#affichage de l'execution
-print("Mot reconnu : ")
-print(execution.run_with_input_list(inp_program))
+    #la lecture en entrée
+    inp_program = tuple('aba')
+    print("Reconnaisance du mot ... ")
+    #affichage de l'execution
+    print("Mot reconnu : ")
+    print(execution.run_with_input_list(inp_program))
 
-#transformation en automate reduit
+    #transformation en automate reduit
 
-execution.Reduction()
-print("Trace après Reduction")
-print(etats)
-print(Instructions)
-print(etatFinale)
+    execution.Reduction()
+    print("Trace après Reduction")
+    print(etats)
+    print(Instructions)
+    print(etatFinale)
 
-#transformation miroir
-execution.miroir()
-print("Trace apres Miroir")
-print(etats)
-print(Instructions)
-print(etatFinale)
+    #transformation miroir
+    execution.miroir()
+    print("Trace apres Miroir")
+    print(etats)
+    print(Instructions)
+    print(etatFinale)
+pass
