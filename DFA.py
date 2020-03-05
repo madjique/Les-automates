@@ -1,26 +1,21 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Thu Mar  5 11:30:41 2020
-
-@author: Snow
-"""
 
 class AutomateEtatFini:
-    Etat = None
+    etat = None
     def __init__(self, etats, alphabet, transition_function, etatInit, etatsFinals):
         self.etats = etats
         self.alphabet = alphabet
         self.transition_function = transition_function
         self.etatInit = etatInit
         self.etatsFinals = etatsFinals
-        self.Etat = etatInit
+        self.etat = etatInit
         return
     
-    def transition_to_state_with_input(self, input_value):
-        if ((self.etat, input_value) not in self.transition_function.keys()):
-            self.etat = None
+    def transition_to_state_with_input(self, inp):
+        if (self.etat,inp)  in self.transition_function.keys() :
+            self.etat = self.transition_function[(self.etat,inp)]
             return
-        self.etat = self.transition_function[(self.etat, input_value)]
+        self.etat = None
         return
     
     def in_accept_state(self):
@@ -39,44 +34,60 @@ class AutomateEtatFini:
     pass
 
     def Reduction(self):
-        #on cherche les etat non accessible
-        accessiblenonverif = {self.etatInit}
-        accessible = list()
+        #on cherche les etat  accessible
+        accessiblenonverif =[]
+        accessiblenonverif.append(self.etatInit)
+        accessible = []
         for st in accessiblenonverif :
             accessible.append(st)
             for x in self.alphabet :
-                suiv = self.transition_function[(st, x)]
-                if suiv in self.transition_function.keys() :
+                if (st,x) in self.transition_function.keys() :
+                    suiv = self.transition_function[(st, x)]
                     if suiv not in accessible :
-                        accessiblenonverif.add(st)
+                        accessiblenonverif.append(suiv)
         #fonction verif coacess
         def verifCoAcess(st) :
-            if  st in self.etatsFinals :
+            if st in self.etatsFinals :
                 return True
             else :
-                suivb = self.transition_function[(st,'b')]
-                if suivb in self.transition_function.keys()  and suivb != st :
-                    vb = verifCoAcess (suivb)
+                if (st,'b') in self.transition_function.keys()  :
+                    suivb = self.transition_function[(st,'b')]
+                    if (st != suivb ) :
+                        vb = verifCoAcess(suivb)
+                    else : 
+                        vb= False
                 else :
                     vb = False
-                suiva = self.transition_function[(st,'a')]
-                if suiva in self.transition_function.keys() and suiva != st :
-                    va = verifCoAcess (suiva)
+                
+                if (st,'a') in self.transition_function.keys() :
+                    suiva = self.transition_function[(st,'a')]
+                    if (st != suiva) :   
+                        va = verifCoAcess(suiva)
+                    else :
+                        va = False
                 else :
                     va = False
                 return va or vb
+            
         #on cherche les etat non co-accessible
-        coacces=list()
+        coacces= []
         for x in self.etats :
-            if verifCoAcess(x) :
+            if verifCoAcess(x)  :
                 coacces.append(x)
         #on supprime les non accessible et non coaccessible
-        for st in self.etats:
-            if st not in accessible or st not in coacces:
-                self.etats.discard(st)
-                del self.transition_function[(st,'a')]
-                del self.transition_function[(st,'b')]
+        transitionEtat = self.etats.copy()
+        for st in transitionEtat:
+            if st not in accessible or st  not in coacces:
+                self.etats.remove(st)
+                if (st,'a') in self.transition_function.keys() :
+                    del self.transition_function[(st,'a')]
+                if (st,'b') in self.transition_function.keys() :
+                    del self.transition_function[(st,'b')]
+        pass
 
+    def miroir(self, parameter_list):
+        
+        pass
 
 
 #initialisation des etats et de l'alphabet
@@ -84,27 +95,34 @@ class AutomateEtatFini:
 etats = {'q0','q1','q2','q3','q4'}
 alphabet = {'a','b'}
 etatInitiale = 'q0'
-etatFinale = {'q3'}
+etatFinale = {'q0','q2'}
 
 #parametrage des instructions
 
-Instructions = dict()
-Instructions[('q0','a')] = ['q1','q3']
-Instructions[('q1','b')] = 'q2'
-Instructions[('q2','a')] = 'q3'
-Instructions[('q3','b')] = 'q3'
- 
+Instructions = {}
+Instructions[('q0','a')] = 'q0'
+Instructions[('q0','b')] = 'q1'
+Instructions[('q1','a')] = 'q2'
+Instructions[('q1','b')] = 'q0'
+Instructions[('q2','a')] = 'q2'
+Instructions[('q3','a')] = 'q3'
+Instructions[('q3','b')] = 'q4'
+
 #execution de l'automate 
 
 execution = AutomateEtatFini(etats, alphabet, Instructions, etatInitiale, etatFinale)
 
 #la lecture en entrée
-
-inp_program = list('ababbbbbbb')
+inp_program = tuple('aba')
 
 #affichage de l'execution
 
-print (execution.run_with_input_list(inp_program))
-
+#print(execution.run_with_input_list(inp_program))
 
 #transformation en automate reduit
+
+execution.Reduction()
+print(etats)
+print(Instructions)
+
+#transformation miroir
