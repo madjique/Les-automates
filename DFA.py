@@ -24,7 +24,7 @@ class AutomateEtatFini:
         return
     
     def in_accept_state(self):
-        return self.etat in etatsFinals
+        return self.etat in self.etatsFinals
     
     def go_to_initial_state(self):
         self.etat = self.etatInit
@@ -38,12 +38,44 @@ class AutomateEtatFini:
         return self.in_accept_state()
     pass
 
-    #def Reduction(self):
+    def Reduction(self):
         #on cherche les etat non accessible
-        #on supprime
+        accessiblenonverif = {self.etatInit}
+        accessible = list()
+        for st in accessiblenonverif :
+            accessible.append(st)
+            for x in self.alphabet :
+                suiv = self.transition_function[(st, x)]
+                if suiv in self.transition_function.keys() :
+                    if suiv not in accessible :
+                        accessiblenonverif.add(st)
+        #fonction verif coacess
+        def verifCoAcess(st) :
+            if  st in self.etatsFinals :
+                return True
+            else :
+                suivb = self.transition_function[(st,'b')]
+                if suivb in self.transition_function.keys()  and suivb != st :
+                    vb = verifCoAcess (suivb)
+                else :
+                    vb = False
+                suiva = self.transition_function[(st,'a')]
+                if suiva in self.transition_function.keys() and suiva != st :
+                    va = verifCoAcess (suiva)
+                else :
+                    va = False
+                return va or vb
         #on cherche les etat non co-accessible
-        #on supprime
-
+        coacces=list()
+        for x in self.etats :
+            if verifCoAcess(x) :
+                coacces.append(x)
+        #on supprime les non accessible et non coaccessible
+        for st in self.etats:
+            if st not in accessible or st not in coacces:
+                self.etats.discard(st)
+                del self.transition_function[(st,'a')]
+                del self.transition_function[(st,'b')]
 
 
 
