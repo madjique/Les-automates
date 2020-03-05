@@ -5,82 +5,66 @@ Created on Thu Mar  5 11:30:41 2020
 @author: Snow
 """
 
-class DFA:
-    current_state = None;
-    def __init__(self, states, alphabet, transition_function, start_state, accept_states):
-        self.states = states;
-        self.alphabet = alphabet;
-        self.transition_function = transition_function;
-        self.start_state = start_state;
-        self.accept_states = accept_states;
-        self.current_state = start_state;
-        return;
+class AutomateEtatFini:
+    Etat = None
+    def __init__(self, etats, alphabet, transition_function, etatInit, etatsFinals):
+        self.etats = etats
+        self.alphabet = alphabet
+        self.transition_function = transition_function
+        self.etatInit = etatInit
+        self.etatsFinals = etatsFinals
+        self.Etat = etatInit
+        return
     
     def transition_to_state_with_input(self, input_value):
-        if ((self.current_state, input_value) not in self.transition_function.keys()):
-            self.current_state = None;
-            return;
-        self.current_state = self.transition_function[(self.current_state, input_value)];
-        return;
+        if ((self.etat, input_value) not in self.transition_function.keys()):
+            self.etat = None
+            return
+        self.etat = self.transition_function[(self.etat, input_value)]
+        return
     
     def in_accept_state(self):
-        return self.current_state in accept_states;
+        return self.etat in etatsFinals
     
     def go_to_initial_state(self):
-        self.current_state = self.start_state;
-        return;
+        self.etat = self.etatInit
+        return
     
     def run_with_input_list(self, input_list):
-        self.go_to_initial_state();
+        self.go_to_initial_state()
         for inp in input_list:
-            self.transition_to_state_with_input(inp);
-            continue;
-        return self.in_accept_state();
-    pass;
+            self.transition_to_state_with_input(inp)
+            continue
+        return self.in_accept_state()
+    pass
 
 
+#initialisation des etats et de l'alphabet
 
-states = {'q0','q1','q2','q3','q4'};
-alphabet = {'a','b'};
+etats = {'q0','q1','q2','q3','q4'}
+alphabet = {'a','b'}
+etatInitiale = 'q0'
+etatFinale = {'q3'}
 
-tf = dict();
-tf[('q0','a')] = ['q1','q3'];
-tf[('q0','0')] = 'q3'
+#parametrage des instructions
 
-tf[('q1','b')] = 'q2'
-#tf[('q1','0')] = 'q2'
-
-tf[('q2','a')] = 'q3'
-#tf[('q2','0')] = 'q4'
-
-tf[('q3','b')] = 'q3'
+Instructions = dict()
+Instructions[('q0','a')] = ['q1','q3']
+Instructions[('q1','b')] = 'q2'
+Instructions[('q2','a')] = 'q3'
+Instructions[('q3','b')] = 'q3'
  
- 
- 
-"""tf[('q3','0')] = 'q5'
+#execution de l'automate 
 
-tf[('q4','1')] = 'q6'
-tf[('q4','0')] = 'q4'
+execution = AutomateEtatFini(etats, alphabet, tf, etatInitiale, etatFinale)
 
-tf[('q5','1')] = 'q3'
-tf[('q5','0')] = 'q7'
+#la lecture en entrée
 
-tf[('q6','1')] = 'q8'
-tf[('q6','0')] = 'q4'
+inp_program = list('ababbbbbbb')
 
-tf[('q7','1')] = 'q8'
-tf[('q7','0')] = 'q7'
+#affichage de l'execution
 
-tf[('q8','1')] = 'q8'
-tf[('q8','0')] = 'q7' """
+print (execution.run_with_input_list(inp_program))
 
 
-
-start_state = 'q0';
-accept_states = {'q3'};
-
-d = DFA(states, alphabet, tf, start_state, accept_states);
-
-inp_program = list('ababbbbbbb');
-
-print (d.run_with_input_list(inp_program));
+#transformation en automate 
