@@ -38,6 +38,14 @@ class AutomateEtatFini:
         return self.in_accept_state()
     pass
 
+    #def Reduction(self):
+        #on cherche les etat non accessible
+        #on supprime
+        #on cherche les etat non co-accessible
+        #on supprime
+
+
+
 
 #initialisation des etats et de l'alphabet
 
@@ -56,7 +64,7 @@ Instructions[('q3','b')] = 'q3'
  
 #execution de l'automate 
 
-execution = AutomateEtatFini(etats, alphabet, tf, etatInitiale, etatFinale)
+execution = AutomateEtatFini(etats, alphabet, Instructions, etatInitiale, etatFinale)
 
 #la lecture en entrée
 
@@ -67,4 +75,4 @@ inp_program = list('ababbbbbbb')
 print (execution.run_with_input_list(inp_program))
 
 
-#transformation en automate 
+#transformation en automate reduit
