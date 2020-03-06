@@ -101,7 +101,21 @@ class AutomateEtatFini:
         for x in self.etatsFinals :
             self.etatInit.add(x)
         pass
-
+    def Complement(self) :
+        #ajouter letat  c
+        self.etats.add('c')
+        # rajouter les instruction restant pour chanque etat a c  
+        for st in self.etats :
+            for x in self.alphabet :
+                if (st,x) not in self.transition_function.keys() :
+                    self.transition_function[(st,x)]=['c']
+        #rendre les etat finaux normaux et etat normaux finaux
+        shadow = self.etatsFinals.copy()
+        self.etatsFinals.clear()
+        for  st in self.etats :
+            if st not in shadow :
+                self.etatsFinals.add(st)
+        pass
 
 #__main__
 if __name__ == "__main__":    
@@ -148,6 +162,14 @@ if __name__ == "__main__":
     #transformation miroir
     execution.miroir()
     print("Trace apres Miroir")
+    print(etats)
+    print(Instructions)
+    print(etatFinale)
+
+    #complement 
+
+    execution.Complement()
+    print("Trace aprs complement")
     print(etats)
     print(Instructions)
     print(etatFinale)
