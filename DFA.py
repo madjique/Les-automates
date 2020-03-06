@@ -135,7 +135,10 @@ class AutomateEtatFini:
     def automate_simple(self):
         for i,j in self.transition_function.items():
             if i[1]=='$':
-                j
+                for x in j:
+                    for alpha in self.alphabet:
+                        self.transition_function[(i[0],alpha)]= self.transition_function[(x,alpha)]
+        pass
                 
             
               
