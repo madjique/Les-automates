@@ -118,6 +118,34 @@ class AutomateEtatFini:
             if st not in shadow :
                 self.etatsFinals.add(st)
         pass
+        def nfa_to_dfa(self) :
+            ## rendre l'automate simple
+            dfa=dict()
+            dfa_list=[]              
+            dfa_list.append(self.etatInit)
+            for etat_prec in dfa_list:
+                for alpha in self.alphabet:
+                        nvl_etat=[]
+                        for i in etat_prec:
+                            if (i,alpha) in self.transition_function:
+                                nvl_etat.append(self.transition_function[(i,alpha)])                  
+                        liist=[]
+                        if len(nvl_etat)!=0:
+                            for j in nvl_etat:
+                                if isinstance(j,list):
+                                    for k in j:
+                                        liist.append(k)
+                                else :
+                                    liist.append(j)
+        
+                            dfa[tuple(etat_prec),alpha]=set(liist)
+                            liist=set(liist)
+                            if liist not in dfa_list:
+                                dfa_list.append(liist)
+            
+            for x, y in dfa.items():
+                print(x,'----->', y)
+            pass                
 
 def  afficher(etats,etatInitiale,etatFinale,Instructions) :
     time.sleep(3)
@@ -147,7 +175,7 @@ def  afficher(etats,etatInitiale,etatFinale,Instructions) :
     #execution de la simmulation
     os.popen("python simulation.py")
     pass
-
+   
 #__main__
 if __name__ == "__main__":    
 #initialisation des etats et de l'alphabet
