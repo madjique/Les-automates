@@ -133,11 +133,19 @@ class AutomateEtatFini:
         
         pass    
     def automate_simple(self):
+        simple=dict()
+        l=set()
         for i,j in self.transition_function.items():
             if i[1]=='$':
+                l.add(i[0])
                 for x in j:
                     for alpha in self.alphabet:
-                        self.transition_function[(i[0],alpha)]= self.transition_function[(x,alpha)]
+                        simple[(i[0],alpha)]= self.transition_function[(x,alpha)]
+            
+        for i in l:
+            self.transition_function.pop((i,'$'))
+        self.transition_function.update(simple)
+        print(self.transition_function)
         pass
                 
             
@@ -149,27 +157,28 @@ if __name__ == "__main__":
 #initialisation des etats et de l'alphabet
 
     etats = {'q0','q1','q2'}
-    alphabet = {'0','1'}
+    alphabet = {'a','b'}
     etatInitiale = {'q0'}
     etatFinale = {'q2'}
 
     #parametrage des instructions
     #dictionnary
     Instructions = {
-        ('q0','1') : ['q1','q2'] ,
-        ('q1','0') : ['q1'] ,
-        ('q1','1') : ['q2'],
-        ('q2','0') : 'q0'
+        ('q0','$') : ['q1'] ,
+        ('q1','b') : ['q1'] ,
+        ('q1','a') : ['q2'],
+        ('q2','b') : 'q1'
         
     }
     execution = AutomateEtatFini(etats, alphabet, Instructions, etatInitiale, etatFinale)
+    execution.automate_simple()
     Etatf=set()
     dfa=dict()
-    execution.nfa_to_dfa(dfa,Etatf)
+    """ execution.nfa_to_dfa(dfa,Etatf)
     for x, y in dfa.items():
         print(x,'----->', y)
     print("Les etats finaux :",Etatf) 
-    print("l'etat initial : ", execution.etatInit)
+    print("l'etat initial : ", execution.etatInit)"""
     
     #execution de l'automate 
 #la lecture en entrée
