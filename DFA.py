@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-
+import os
+import time
 class AutomateEtatFini:
     etat = None
     def __init__(self, etats, alphabet, transition_function, etatInit, etatsFinals):
@@ -101,6 +102,7 @@ class AutomateEtatFini:
         for x in self.etatsFinals :
             self.etatInit.add(x)
         pass
+
     def Complement(self) :
         #ajouter letat  c
         self.etats.add('c')
@@ -116,6 +118,35 @@ class AutomateEtatFini:
             if st not in shadow :
                 self.etatsFinals.add(st)
         pass
+
+def  afficher(etats,etatInitiale,etatFinale,Instructions) :
+    time.sleep(3)
+    f = open("input.dot","w")
+    #generation du text 
+    DotTextToFile =" digraph { \n"
+    DotTextToFile += "fake [style=invisible]\nfake -> s0 [style=bold]\n"
+    #ecriture des etats
+    for x in etats :
+        DotTextToFile += x 
+        if x in etatFinale and x in etatInitiale :
+            DotTextToFile += " [root=true , shape=doublecircle]"
+        else :
+            if x in etatInitiale :
+                DotTextToFile += " [root=true]"
+            if x in etatFinale :
+                DotTextToFile += " [shape=doublecircle]"
+        DotTextToFile+="\n"
+    #ecriture  des transition
+    for x in Instructions.keys() :
+        for i in Instructions[x] :
+            DotTextToFile+= x[0] + " -> " + i +"[label=\""+x[1]+"\"] \n"
+    #fermeture de l'acollade
+    DotTextToFile += "\n }"
+    #ecriture dans le fichier
+    f.write(DotTextToFile)
+    #execution de la simmulation
+    os.popen("python simulation.py")
+    pass
 
 #__main__
 if __name__ == "__main__":    
@@ -138,8 +169,6 @@ if __name__ == "__main__":
         ('q3','b') : ['q4']
     }
 
-    
-
     #execution de l'automate 
 
     execution = AutomateEtatFini(etats, alphabet, Instructions, etatInitiale, etatFinale)
@@ -151,6 +180,8 @@ if __name__ == "__main__":
     print("Mot reconnu : ")
     print(execution.run_with_input_list(inp_program))
 
+    #affichage
+    afficher(etats,etatInitiale,etatFinale,Instructions)
     #transformation en automate reduit
 
     execution.Reduction()
@@ -159,13 +190,14 @@ if __name__ == "__main__":
     print(Instructions)
     print(etatFinale)
 
+    afficher(etats,etatInitiale,etatFinale,Instructions)
     #transformation miroir
     execution.miroir()
     print("Trace apres Miroir")
     print(etats)
     print(Instructions)
     print(etatFinale)
-
+    afficher(etats,etatInitiale,etatFinale,Instructions)
     #complement 
 
     execution.Complement()
@@ -173,5 +205,5 @@ if __name__ == "__main__":
     print(etats)
     print(Instructions)
     print(etatFinale)
-
+    afficher(etats,etatInitiale,etatFinale,Instructions)
 pass
