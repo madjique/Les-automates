@@ -104,10 +104,9 @@ class AutomateEtatFini:
         for x in self.etatsFinals :
             self.etatInit.add(x)
         pass
-    def nfa_to_dfa(self):
-        ## rendre l'automate simple
-        dfa=dict()
-        dfa_list=[]              
+    def nfa_to_dfa(self,dfa,etatFinal):
+        ## rendre l'automate simple 
+        dfa_list=[]   
         dfa_list.append(self.etatInit)
         for etat_prec in dfa_list:
             for alpha in self.alphabet:
@@ -123,15 +122,23 @@ class AutomateEtatFini:
                                     liist.append(k)
                             else :
                                 liist.append(j)
-    
-                        dfa[tuple(etat_prec),alpha]=set(liist)
+                        for m in set(liist):
+                            if m in self.etatsFinals:
+                                etatFinal.add("".join(set(liist)))
+                                break
+                        dfa["".join(etat_prec),alpha]="".join(set(liist))
                         liist=set(liist)
                         if liist not in dfa_list:
                             dfa_list.append(liist)
         
-        for x, y in dfa.items():
-            print(x,'----->', y)
-        pass                
+        pass    
+    def automate_simple(self):
+        for i,j in self.transition_function.items():
+            if i[1]=='$':
+                j
+                
+            
+              
 
 
 #__main__
@@ -149,12 +156,17 @@ if __name__ == "__main__":
         ('q0','1') : ['q1','q2'] ,
         ('q1','0') : ['q1'] ,
         ('q1','1') : ['q2'],
-        ('q2','0') : ['q0']
+        ('q2','0') : 'q0'
         
     }
     execution = AutomateEtatFini(etats, alphabet, Instructions, etatInitiale, etatFinale)
-    execution.nfa_to_dfa()
-
+    Etatf=set()
+    dfa=dict()
+    execution.nfa_to_dfa(dfa,Etatf)
+    for x, y in dfa.items():
+        print(x,'----->', y)
+    print("Les etats finaux :",Etatf) 
+    print("l'etat initial : ", execution.etatInit)
     
     #execution de l'automate 
 #la lecture en entrée
