@@ -13,7 +13,7 @@ class AutomateEtatFini:
     
     def transition_to_state_with_input(self, inp):
         if (self.etat,inp)  in self.transition_function.keys() :
-            self.etat = self.transition_function[(self.etat,inp)]
+            self.etat =self.transition_function[(self.etat,inp)][0]
             return
         self.etat = None
         return
@@ -22,7 +22,8 @@ class AutomateEtatFini:
         return self.etat in self.etatsFinals
     
     def go_to_initial_state(self):
-        self.etat = self.etatInit
+        self.etat = self.etatInit.pop()
+        self.etatInit.add(self.etat)
         return
     
     def run_with_input_list(self, input_list):
@@ -36,13 +37,15 @@ class AutomateEtatFini:
     def Reduction(self):
         #on cherche les etat  accessible
         accessiblenonverif =[]
-        accessiblenonverif.append(self.etatInit)
+        self.etat = self.etatInit.pop()
+        self.etatInit.add(self.etat)
+        accessiblenonverif.append(self.etat)
         accessible = []
         for st in accessiblenonverif :
             accessible.append(st)
             for x in self.alphabet :
                 if (st,x) in self.transition_function.keys() :
-                    suiv = self.transition_function[(st, x)]
+                    suiv = self.transition_function[(st, x)][0]
                     if suiv not in accessible :
                         accessiblenonverif.append(suiv)
         #fonction verif coacess
@@ -53,7 +56,7 @@ class AutomateEtatFini:
                 lastv = False
                 for x in self.alphabet :
                     if (st,x) in self.transition_function.keys()  :
-                        suiv = self.transition_function[(st,x)]
+                        suiv = self.transition_function[(st,x)][0]
                         if (st != suiv ) :
                             v = verifCoAcess(suiv)
                         else : 
@@ -84,11 +87,19 @@ class AutomateEtatFini:
         for st in self.etats :
             for x in self.alphabet :
                 if (st,x) in self.transition_function.keys() :
-                    elt = self.transition_function[(st,x)]
-                    newInstru[(elt,x)]=st
+                    elt = self.transition_function[(st,x)][0]
+                    if (elt,x) in newInstru.keys():
+                        newInstru[(elt,x)].append(st)
+                    else :
+                        newInstru[(elt,x)] = [st]
         self.transition_function.clear()
         for x in newInstru.keys():
             self.transition_function[x] = newInstru[x]
+        #modif des etat finaux et initiaux 
+        for x in self.etatInit:
+            self.etatsFinals.add(x)
+        for x in self.etatsFinals :
+            self.etatInit.add(x)
         pass
 
 
@@ -98,19 +109,22 @@ if __name__ == "__main__":
 
     etats = {'q0','q1','q2','q3','q4'}
     alphabet = {'a','b'}
-    etatInitiale = 'q0'
+    etatInitiale = {'q0'}
     etatFinale = {'q0','q2','q3'}
 
     #parametrage des instructions
+    #dictionnary
+    Instructions = {
+        ('q0','a') : ['q0'] ,
+        ('q0','b') : ['q1'] ,
+        ('q1','a') : ['q2'] ,
+        ('q1','b') : ['q0'] ,
+        ('q2','a') : ['q2'] ,
+        ('q3','a') : ['q3'] ,
+        ('q3','b') : ['q4']
+    }
 
-    Instructions = {}
-    Instructions[('q0','a')] = 'q0'
-    Instructions[('q0','b')] = 'q1'
-    Instructions[('q1','a')] = 'q2'
-    Instructions[('q1','b')] = 'q0'
-    Instructions[('q2','a')] = 'q2'
-    Instructions[('q3','a')] = 'q3'
-    Instructions[('q3','b')] = 'q4'
+    
 
     #execution de l'automate 
 
@@ -137,4 +151,5 @@ if __name__ == "__main__":
     print(etats)
     print(Instructions)
     print(etatFinale)
+
 pass
