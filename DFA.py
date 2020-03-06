@@ -24,7 +24,7 @@ class AutomateEtatFini:
         return
     
     def in_accept_state(self):
-        return self.etat in etatsFinals
+        return self.etat in self.etatsFinals
     
     def go_to_initial_state(self):
         self.etat = self.etatInit
@@ -36,8 +36,37 @@ class AutomateEtatFini:
             self.transition_to_state_with_input(inp)
             continue
         return self.in_accept_state()
-    pass
-
+  
+    
+    def nfa_to_dfa(self):
+        ## rendre l'automate simple
+        dfa=dict()
+        dfa_list=[]              
+        dfa_list.append(self.etatInit)
+        for etat_prec in dfa_list:
+            for alpha in alphabet:
+                    nvl_etat=[]
+                    if isinstance(etat_prec,str):
+                        etat_prec=[etat_prec]
+                    for i in etat_prec:
+                        print(i)
+                        nvl_etat.append(self.transition_function[(i,alpha)])                  
+                    liist=[]
+                    for j in nvl_etat:
+                        if isinstance(j,list):
+                            for k in j:
+                                liist.append(k)
+                        else :
+                            liist.append(j)
+                    dfa[(etat_prec,alpha)]=liist
+                    nvl_etat=set(nvl_etat)
+                    if nvl_etat not in dfa_list:
+                        dfa_list.append(nvl_etat)
+        
+        
+        print(dfa)
+        pass                                       
+                                              
     #def Reduction(self):
         #on cherche les etat non accessible
         #on supprime
@@ -49,30 +78,31 @@ class AutomateEtatFini:
 
 #initialisation des etats et de l'alphabet
 
-etats = {'q0','q1','q2','q3','q4'}
+etats = {'q0','q1','q2'}
 alphabet = {'a','b'}
 etatInitiale = 'q0'
-etatFinale = {'q3'}
+etatFinale = 'q2'
 
 #parametrage des instructions
 
 Instructions = dict()
-Instructions[('q0','a')] = ['q1','q3']
+Instructions[('q0','a')] = ['q1','q2']
 Instructions[('q1','b')] = 'q2'
-Instructions[('q2','a')] = 'q3'
-Instructions[('q3','b')] = 'q3'
+
  
 #execution de l'automate 
 
 execution = AutomateEtatFini(etats, alphabet, Instructions, etatInitiale, etatFinale)
 
+execution.nfa_to_dfa()
+
 #la lecture en entrée
 
-inp_program = list('ababbbbbbb')
+#inp_program = list('ababbbbbbb')
 
 #affichage de l'execution
 
-print (execution.run_with_input_list(inp_program))
+#print (execution.run_with_input_list(inp_program))
 
 
 #transformation en automate reduit
