@@ -269,33 +269,5 @@ if __name__ == "__main__":
     print("les etats finaux : ",etatFinale)
     print("l'état initial : ",etatInitiale)
     #afficher(etats,etatInitiale,etatFinale,Instructions)
-
-
-    """execution.Reduction()
-    print("Trace après Reduction")
-    print(etats)
-    print(Instructions)
-    print(etatFinale)
-
-    afficher(etats,etatInitiale,etatFinale,Instructions)
-    #transformation miroir
-    execution.miroir()
-    print("Trace apres Miroir")
-    print(etats)
-    print(Instructions)
-    print(etatFinale)
-    afficher(etats,etatInitiale,etatFinale,Instructions)
-    #complement 
-
-    execution.Complement()
-    print("Trace aprs complement")
-    print(etats)
-    print(Instructions)
-    print(etatFinale)
-    afficher(etats,etatInitiale,etatFinale,Instructions)
-    
-    #test NFA to DFA
-    execution.nfa_to_dfa()
-    afficher(etats,etatInitiale,etatFinale,Instructions)"""
     
 pass
