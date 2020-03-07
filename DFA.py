@@ -203,23 +203,24 @@ def  afficher(etats,etatInitiale,etatFinale,Instructions) :
 if __name__ == "__main__":    
 #initialisation des etats et de l'alphabet
 
-    etats = {'q0','q1'}
-    alphabet = {'a','b'}
+    etats = {'q0','q1','q2','q3','q4'}
+    alphabet = {'a','b','c'}
     etatInitiale = {'q0'}
-    etatFinale = {'q1'}
+    etatFinale = {'q4'}
     #parametrage des instructions
     #dictionnary
     Instructions = {
-        ('q0','a') : ['q1'] 
+        ('q0','a') : ['q1'],
+        ('q1','c') : ['q2'],
+        ('q1','$') : ['q2','q3'],
+        ('q2','b') : ['q2','q3'],
+        ('q2','a') : ['q2'],
+        ('q3','$') : ['q4']
         
      
     }
          
-    """('q1','c') : ['q2'],
-        ('q1','$') : ['q2','q3'],
-        ('q2','b') : ['q2','q3'],
-        ('q2','a') : ['q2'],
-        ('q3','$') : ['q4']""" 
+
     
     execution = AutomateEtatFini(etats, alphabet, Instructions, etatInitiale, etatFinale)
     
@@ -228,19 +229,19 @@ if __name__ == "__main__":
     #rendre l'automate simple
     execution.automate_simple()
     print("******Automate simple*******")
-    for i,j in execution.transition_function.items():
+    for i,j in Instructions.items():
         print(i,'--->',j)
-    print("les etats finaux : ",execution.etatsFinals)
-    print("l'état initial : ",execution.etatInit)
+    print("les etats finaux : ",etatFinale)
+    print("l'état initial : ",etatInitiale)
     #afficher(etats,etatInitiale,etatFinale,Instructions)
     
     #test NFA to DFA
     execution.nfa_to_dfa()
     print("******Automate Deterministe*******")
-    for i,j in execution.transition_function.items():
+    for i,j in Instructions.items():
         print(i,'--->',j)
-    print("les etats finaux : ",execution.etatsFinals)
-    print("l'état initial : ",execution.etatInit)
+    print("les etats finaux : ",etatFinale)
+    print("l'état initial : ",etatInitiale)
     #afficher(etats,etatInitiale,etatFinale,Instructions)
     
     print("******Reconaissance d'un mot*******")
@@ -251,30 +252,31 @@ if __name__ == "__main__":
 
     
     #transformation en automate reduit
-    """execution.Reduction()
+    execution.Reduction()
     print("******Automate Reduit*******")
-    for i,j in execution.transition_function.items():
+    for i,j in Instructions.items():
         print(i,'--->',j)
-    print("les etats finaux : ",execution.etatsFinals)
-    print("l'état initial : ",execution.etatInit)
+    print("les etats finaux : ",etatFinale)
+    print("l'état initial : ",etatInitiale)
     #afficher(etats,etatInitiale,etatFinale,Instructions)
     
     #transformation miroir
     execution.miroir()
     print("******Miroir*******")
-    for i,j in execution.transition_function.items():
+
+    for i,j in Instructions.items():
         print(i,'--->',j)
-    print("les etats finaux : ",execution.etatsFinals)
-    print("l'état initial : ",execution.etatInit)"""
+    print("les etats finaux : ",etatFinale)
+    print("l'état initial : ",etatInitiale)
     #afficher(etats,etatInitiale,etatFinale,Instructions)
    
     #complement 
     execution.Complement()
     print("******Complement*******")
-    for i,j in execution.transition_function.items():
+    for i,j in Instructions.items():
         print(i,'--->',j)
-    print("les etats finaux : ",execution.etatsFinals)
-    print("l'état initial : ",execution.etatInit)
+    print("les etats finaux : ",etatFinale)
+    print("l'état initial : ",etatInitiale)
     #afficher(etats,etatInitiale,etatFinale,Instructions)"""
  
     
