@@ -203,21 +203,23 @@ def  afficher(etats,etatInitiale,etatFinale,Instructions) :
 if __name__ == "__main__":    
 #initialisation des etats et de l'alphabet
 
-    etats = {'q0','q1','q2','q3','q4'}
-    alphabet = {'a','b','c'}
+    etats = {'q0','q1'}
+    alphabet = {'a','b'}
     etatInitiale = {'q0'}
-    etatFinale = {'q4'}
+    etatFinale = {'q1'}
     #parametrage des instructions
     #dictionnary
     Instructions = {
-        ('q0','a') : ['q1'] ,
-        ('q1','c') : ['q2'],
+        ('q0','a') : ['q1'] 
+        
+     
+    }
+         
+    """('q1','c') : ['q2'],
         ('q1','$') : ['q2','q3'],
         ('q2','b') : ['q2','q3'],
         ('q2','a') : ['q2'],
-        ('q3','$') : ['q4']
-     
-    }
+        ('q3','$') : ['q4']""" 
     
     execution = AutomateEtatFini(etats, alphabet, Instructions, etatInitiale, etatFinale)
     
@@ -242,7 +244,7 @@ if __name__ == "__main__":
     #afficher(etats,etatInitiale,etatFinale,Instructions)
     
     print("******Reconaissance d'un mot*******")
-    inp_program = tuple('abc')
+    inp_program = tuple('a')
     #affichage de l'execution
     print("Mot  : ","".join(inp_program))
     print("Resultat : ",execution.run_with_input_list(inp_program))
@@ -251,28 +253,28 @@ if __name__ == "__main__":
     #transformation en automate reduit
     """execution.Reduction()
     print("******Automate Reduit*******")
-    for i,j in Instructions.items():
+    for i,j in execution.transition_function.items():
         print(i,'--->',j)
-    print("les etats finaux : ",etatFinale)
-    print("l'état initial : ",etatInitiale)
+    print("les etats finaux : ",execution.etatsFinals)
+    print("l'état initial : ",execution.etatInit)
     #afficher(etats,etatInitiale,etatFinale,Instructions)
     
     #transformation miroir
     execution.miroir()
     print("******Miroir*******")
-    for i,j in Instructions.items():
+    for i,j in execution.transition_function.items():
         print(i,'--->',j)
-    print("les etats finaux : ",etatFinale)
-    print("l'état initial : ",etatInitiale)
+    print("les etats finaux : ",execution.etatsFinals)
+    print("l'état initial : ",execution.etatInit)"""
     #afficher(etats,etatInitiale,etatFinale,Instructions)
    
     #complement 
     execution.Complement()
     print("******Complement*******")
-    for i,j in Instructions.items():
+    for i,j in execution.transition_function.items():
         print(i,'--->',j)
-    print("les etats finaux : ",etatFinale)
-    print("l'état initial : ",etatInitiale)
+    print("les etats finaux : ",execution.etatsFinals)
+    print("l'état initial : ",execution.etatInit)
     #afficher(etats,etatInitiale,etatFinale,Instructions)"""
  
     
