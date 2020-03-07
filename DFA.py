@@ -14,7 +14,7 @@ class AutomateEtatFini:
     
     def transition_to_state_with_input(self, inp):
         if (self.etat,inp)  in self.transition_function.keys() :
-            self.etat =self.transition_function[(self.etat,inp)][0]
+            self.etat =self.transition_function[(self.etat,inp)]
             return
         self.etat = None
         return
@@ -146,13 +146,9 @@ class AutomateEtatFini:
                                 break
                         dfa["".join(etat_prec),alpha]="".join(set(liist))
                         liist=set(liist)
+   
                         if liist not in dfa_list:
-                            dfa_list.append(liist)
-                        dfa[tuple(etat_prec),alpha]=set(liist)
-                        liist=set(liist)
-                        if liist not in dfa_list:
-                            dfa_list.append(liist) 
-        print(dfa)
+                            dfa_list.append(liist)                     
         self.transition_function=dfa
         self.etatsFinals=etatFinal
         pass    
@@ -210,7 +206,6 @@ if __name__ == "__main__":
     alphabet = {'a','b'}
     etatInitiale = {'q0'}
     etatFinale = {'q2'}
-
     #parametrage des instructions
     #dictionnary
     Instructions = {
@@ -230,7 +225,7 @@ if __name__ == "__main__":
         print(i,'--->',j)
     print("les etats finaux : ",execution.etatsFinals)
     print("l'état initial : ",execution.etatInit)
-    afficher(etats,etatInitiale,etatFinale,Instructions)
+    #afficher(etats,etatInitiale,etatFinale,Instructions)
     
     #test NFA to DFA
     execution.nfa_to_dfa()
@@ -239,24 +234,23 @@ if __name__ == "__main__":
         print(i,'--->',j)
     print("les etats finaux : ",execution.etatsFinals)
     print("l'état initial : ",execution.etatInit)
-    afficher(etats,etatInitiale,etatFinale,Instructions)
+    #afficher(etats,etatInitiale,etatFinale,Instructions)
     
     print("******Reconaissance d'un mot*******")
-    inp_program = tuple('a')
+    inp_program = tuple('abc')
     #affichage de l'execution
-    print("Mot  : ",inp_program)
+    print("Mot  : ","".join(inp_program))
     print("Resultat : ",execution.run_with_input_list(inp_program))
 
     
     #transformation en automate reduit
-    """execution.Reduction()
+    execution.Reduction()
     print("******Automate Reduit*******")
     for i,j in Instructions.items():
         print(i,'--->',j)
     print("les etats finaux : ",etatFinale)
     print("l'état initial : ",etatInitiale)
-    afficher(etats,etatInitiale,etatFinale,Instructions)
-    afficher(etats,etatInitiale,etatFinale,Instructions)
+    #afficher(etats,etatInitiale,etatFinale,Instructions)
     
     #transformation miroir
     execution.miroir()
@@ -265,7 +259,7 @@ if __name__ == "__main__":
         print(i,'--->',j)
     print("les etats finaux : ",etatFinale)
     print("l'état initial : ",etatInitiale)
-    afficher(etats,etatInitiale,etatFinale,Instructions)
+    #afficher(etats,etatInitiale,etatFinale,Instructions)
    
     #complement 
     execution.Complement()
@@ -274,8 +268,8 @@ if __name__ == "__main__":
         print(i,'--->',j)
     print("les etats finaux : ",etatFinale)
     print("l'état initial : ",etatInitiale)
-    afficher(etats,etatInitiale,etatFinale,Instructions)
-    afficher(etats,etatInitiale,etatFinale,Instructions)"""
+    #afficher(etats,etatInitiale,etatFinale,Instructions)
+ 
     
     
 pass
