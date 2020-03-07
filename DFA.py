@@ -199,40 +199,79 @@ def  afficher(etats,etatInitiale,etatFinale,Instructions) :
 if __name__ == "__main__":    
 #initialisation des etats et de l'alphabet
 
-    etats = {'q0','q1','q2','q3','q4'}
+    
+    etats = {'q0','q1'}
     alphabet = {'a','b'}
     etatInitiale = {'q0'}
-    etatFinale = {'q0','q2','q3'}
-
+    etatFinale = {'q1'}
     #parametrage des instructions
     #dictionnary
     Instructions = {
-        ('q0','a') : ['q0'] ,
-        ('q0','b') : ['q1'] ,
-        ('q1','a') : ['q2'] ,
-        ('q1','b') : ['q0'] ,
-        ('q2','a') : ['q2'] ,
-        ('q3','a') : ['q3'] ,
-        ('q3','b') : ['q4']
+        ('q0','a') : ['q1'] 
+        
+     
     }
-
     #execution de l'automate 
 
     execution = AutomateEtatFini(etats, alphabet, Instructions, etatInitiale, etatFinale)
 
-    #la lecture en entrée
-    inp_program = tuple('aba')
-    print("Reconnaisance du mot ... ")
-    #affichage de l'execution
-    print("Mot reconnu : ")
-    print(execution.run_with_input_list(inp_program))
-
     #affichage
     afficher(etats,etatInitiale,etatFinale,Instructions)
 
+    #rendre l'automate simple
+    """execution.automate_simple()
+    print("******Automate simple*******")
+    for i,j in Instructions.items():
+        print(i,'--->',j)
+    print("les etats finaux : ",etatFinale)
+    print("l'état initial : ",etatInitiale)
+    #afficher(etats,etatInitiale,etatFinale,Instructions)
+    
+    #test NFA to DFA
+    execution.nfa_to_dfa()
+    print("******Automate Deterministe*******")
+    for i,j in Instructions.items():
+        print(i,'--->',j)
+    print("les etats finaux : ",etatFinale)
+    print("l'état initial : ",etatInitiale)
+    #afficher(etats,etatInitiale,etatFinale,Instructions)"""
+    
+    print("******Reconaissance d'un mot*******")
+    inp_program = tuple('a')
+    #affichage de l'execution
+    print("Mot  : ","".join(inp_program))
+    print("Resultat : ",execution.run_with_input_list(inp_program))
+
     #transformation en automate reduit
     
+    #transformation en automate reduit
     execution.Reduction()
+    for i,j in Instructions.items():
+        print(i,'--->',j)
+    print("les etats finaux : ",etatFinale)
+    print("l'état initial : ",etatInitiale)
+    #afficher(etats,etatInitiale,etatFinale,Instructions)
+    
+    #transformation miroir
+    execution.miroir()
+    print("******Miroir*******")
+    for i,j in Instructions.items():
+        print(i,'--->',j)
+    print("les etats finaux : ",etatFinale)
+    print("l'état initial : ",etatInitiale)
+    #afficher(etats,etatInitiale,etatFinale,Instructions)
+   
+    #complement 
+    execution.Complement()
+    print("******Complement*******")
+    for i,j in Instructions.items():
+        print(i,'--->',j)
+    print("les etats finaux : ",etatFinale)
+    print("l'état initial : ",etatInitiale)
+    #afficher(etats,etatInitiale,etatFinale,Instructions)
+
+
+    """execution.Reduction()
     print("Trace après Reduction")
     print(etats)
     print(Instructions)
@@ -257,6 +296,6 @@ if __name__ == "__main__":
     
     #test NFA to DFA
     execution.nfa_to_dfa()
-    afficher(etats,etatInitiale,etatFinale,Instructions)
+    afficher(etats,etatInitiale,etatFinale,Instructions)"""
     
 pass
