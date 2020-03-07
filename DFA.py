@@ -163,6 +163,7 @@ class AutomateEtatFini:
                         if (x,alpha) in self.transition_function:    
                             simple[(i[0],alpha)]=self.transition_function[(x,alpha)]
         for i in l:
+            self.etatsFinals.add(i)
             self.transition_function.pop((i,'$'))
         self.transition_function.update(simple)
         pass
@@ -202,15 +203,19 @@ def  afficher(etats,etatInitiale,etatFinale,Instructions) :
 if __name__ == "__main__":    
 #initialisation des etats et de l'alphabet
 
-    etats = {'q0','q1','q2','q3'}
-    alphabet = {'a','b'}
+    etats = {'q0','q1','q2','q3','q4'}
+    alphabet = {'a','b','c'}
     etatInitiale = {'q0'}
-    etatFinale = {'q2'}
+    etatFinale = {'q4'}
     #parametrage des instructions
     #dictionnary
     Instructions = {
-        ('q0','$') : ['q1'] ,
-        ('q1','a') : ['q2','q3'] 
+        ('q0','a') : ['q1'] ,
+        ('q1','c') : ['q2'],
+        ('q1','$') : ['q2','q3'],
+        ('q2','b') : ['q2','q3'],
+        ('q2','a') : ['q2'],
+        ('q3','$') : ['q4']
      
     }
     
@@ -244,7 +249,7 @@ if __name__ == "__main__":
 
     
     #transformation en automate reduit
-    execution.Reduction()
+    """execution.Reduction()
     print("******Automate Reduit*******")
     for i,j in Instructions.items():
         print(i,'--->',j)
@@ -268,7 +273,7 @@ if __name__ == "__main__":
         print(i,'--->',j)
     print("les etats finaux : ",etatFinale)
     print("l'état initial : ",etatInitiale)
-    #afficher(etats,etatInitiale,etatFinale,Instructions)
+    #afficher(etats,etatInitiale,etatFinale,Instructions)"""
  
     
     
