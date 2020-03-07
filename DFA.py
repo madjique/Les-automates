@@ -121,7 +121,8 @@ class AutomateEtatFini:
     def nfa_to_dfa(self) :
         ## rendre l'automate simple
         dfa=dict()
-        dfa_list=[]              
+        dfa_list=[] 
+        etatFinal=set()             
         dfa_list.append(self.etatInit)
         for etat_prec in dfa_list:
             for alpha in self.alphabet:
@@ -137,15 +138,33 @@ class AutomateEtatFini:
                                     liist.append(k)
                             else :
                                 liist.append(j)
-        
-                        dfa[tuple(etat_prec),alpha]=set(liist)
+                        for m in set(liist):
+                            if m in self.etatsFinals:
+                                etatFinal.add("".join(set(liist)))
+                                break
+                        dfa["".join(etat_prec),alpha]="".join(set(liist))
                         liist=set(liist)
+   
                         if liist not in dfa_list:
-                            dfa_list.append(liist)
-            
-        for x, y in dfa.items():
-            print(x,'----->', y)
-        pass                   
+                            dfa_list.append(liist)                     
+        self.transition_function=dfa
+        self.etatsFinals=etatFinal
+        pass
+    def automate_simple(self):
+        simple=dict()
+        l=set()
+        for i,j in self.transition_function.items():
+            if i[1]=='$':
+                l.add(i[0])
+                for x in j:
+                    for alpha in self.alphabet:
+                        if (x,alpha) in self.transition_function:    
+                            simple[(i[0],alpha)]=self.transition_function[(x,alpha)]
+        for i in l:
+            self.etatsFinals.add(i)
+            self.transition_function.pop((i,'$'))
+        self.transition_function.update(simple)
+        pass
 
 def  afficher(etats,etatInitiale,etatFinale,Instructions) :
     time.sleep(3)
