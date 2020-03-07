@@ -6,7 +6,7 @@
 - Download and install **Pysimpleautomata** Pakcage with
   - `pip install pysimpleautomata`
 ## Functionalities
-* Switing from NFA to DFA
+* Switching from NFA to DFA
 * Reading recognition
 * Complement 
 * Miroir
