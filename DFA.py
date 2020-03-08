@@ -14,9 +14,8 @@ class AutomateEtatFini:
     
     def transition_to_state_with_input(self, inp):
         if (self.etat,inp)  in self.transition_function.keys() :
-            self.etat =self.transition_function[(self.etat,inp)]
-            return
-        self.etat = None
+            self.etat =self.transition_function[(self.etat,inp)][0]
+        #self.etat = None
         return
     
     def in_accept_state(self):
@@ -31,8 +30,7 @@ class AutomateEtatFini:
         self.go_to_initial_state()
         for inp in input_list:
             self.transition_to_state_with_input(inp)
-            continue
-        return self.in_accept_state()
+        return self.etat in self.etatsFinals
     pass
 
     def Reduction(self):
@@ -124,7 +122,7 @@ class AutomateEtatFini:
         ## rendre l'automate simple
         dfa=dict()
         dfa_list=[] 
-        etatFinal=set()             
+        etatFinal=set()          
         dfa_list.append(self.etatInit)
         for etat_prec in dfa_list:
             for alpha in self.alphabet:
@@ -144,13 +142,15 @@ class AutomateEtatFini:
                             if m in self.etatsFinals:
                                 etatFinal.add("".join(set(liist)))
                                 break
-                        dfa["".join(etat_prec),alpha]="".join(set(liist))
+                        dfa["".join(etat_prec),alpha]=["".join(set(liist))]
                         liist=set(liist)
-   
                         if liist not in dfa_list:
-                            dfa_list.append(liist)                     
-        self.transition_function=dfa
-        self.etatsFinals=etatFinal
+                            dfa_list.append(liist)  
+        self.etatsFinals.clear()   
+        self.transition_function.clear()        
+        self.transition_function.update(dfa)
+        for i in etatFinal :
+            self.etatsFinals.add(i)
         pass    
     def automate_simple(self):
         simple=dict()
@@ -215,9 +215,8 @@ if __name__ == "__main__":
         ('q1','$') : ['q2','q3'],
         ('q2','b') : ['q2','q3'],
         ('q2','a') : ['q2'],
+        ('q2','$') : ['q3'],
         ('q3','$') : ['q4']
-        
-     
     }
          
 
@@ -229,19 +228,19 @@ if __name__ == "__main__":
     #rendre l'automate simple
     execution.automate_simple()
     print("******Automate simple*******")
-    for i,j in Instructions.items():
+    for i,j in execution.transition_function.items():
         print(i,'--->',j)
-    print("les etats finaux : ",etatFinale)
-    print("l'état initial : ",etatInitiale)
+    print("les etats finaux : ",execution.etatsFinals)
+    print("l'état initial : ",execution.etatInit)
     #afficher(etats,etatInitiale,etatFinale,Instructions)
     
     #test NFA to DFA
     execution.nfa_to_dfa()
     print("******Automate Deterministe*******")
-    for i,j in Instructions.items():
+    for i,j in execution.transition_function.items():
         print(i,'--->',j)
-    print("les etats finaux : ",etatFinale)
-    print("l'état initial : ",etatInitiale)
+    print("les etats finaux : ",execution.etatsFinals)
+    print("l'état initial : ",execution.etatInit)
     #afficher(etats,etatInitiale,etatFinale,Instructions)
     
     print("******Reconaissance d'un mot*******")
@@ -250,33 +249,31 @@ if __name__ == "__main__":
     print("Mot  : ","".join(inp_program))
     print("Resultat : ",execution.run_with_input_list(inp_program))
 
-    
     #transformation en automate reduit
     execution.Reduction()
     print("******Automate Reduit*******")
-    for i,j in Instructions.items():
+    for i,j in execution.transition_function.items():
         print(i,'--->',j)
-    print("les etats finaux : ",etatFinale)
-    print("l'état initial : ",etatInitiale)
+    print("les etats finaux : ",execution.etatsFinals)
+    print("l'état initial : ",execution.etatInit)
     #afficher(etats,etatInitiale,etatFinale,Instructions)
     
     #transformation miroir
     execution.miroir()
     print("******Miroir*******")
-
-    for i,j in Instructions.items():
+    for i,j in execution.transition_function.items():
         print(i,'--->',j)
-    print("les etats finaux : ",etatFinale)
-    print("l'état initial : ",etatInitiale)
+    print("les etats finaux : ",execution.etatsFinals)
+    print("l'état initial : ",execution.etatInit)
     #afficher(etats,etatInitiale,etatFinale,Instructions)
    
     #complement 
     execution.Complement()
     print("******Complement*******")
-    for i,j in Instructions.items():
+    for i,j in execution.transition_function.items():
         print(i,'--->',j)
-    print("les etats finaux : ",etatFinale)
-    print("l'état initial : ",etatInitiale)
+    print("les etats finaux : ",execution.etatsFinals)
+    print("l'état initial : ",execution.etatInit)
     #afficher(etats,etatInitiale,etatFinale,Instructions)"""
  
     
