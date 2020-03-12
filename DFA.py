@@ -202,14 +202,28 @@ def  afficher(etats,etatInitiale,etatFinale,Instructions) :
 #__main__
 if __name__ == "__main__":    
 #initialisation des etats et de l'alphabet
-
-    etats = {'q0','q1','q2','q3','q4'}
-    alphabet = {'a','b','c'}
-    etatInitiale = {'q0'}
-    etatFinale = {'q4'}
+    print ("avertissement : si pour entrer plusieurs element séparer avec des espaces !")
+    etats = set(input("les etat : " ).split(" "))
+    alphabet =set(input("l'alphabet : ").split(" "))
+    etatInitiale = set(input("etat initial : ").split(" "))
+    etatFinale = set(input("etats finales :  ").split(" "))
     #parametrage des instructions
     #dictionnary
-    Instructions = {
+    nb=int(input("Entrer le nombre d'instruction : "))
+    Instructions ={
+        ('a','b') : ['d']
+    }
+    Instructions.clear()
+
+    for x in range(nb):
+        print("intruction num ",x," :")
+        e = input("l'etat courant : ")
+        l = input(" lecture de : ")
+        etat = input("passage a l'etat : ").split(" ")
+        Instructions[(e,l)]= etat
+
+
+    """Instructions = {
         ('q0','a') : ['q1'],
         ('q1','c') : ['q2'],
         ('q1','$') : ['q2','q3'],
@@ -217,7 +231,7 @@ if __name__ == "__main__":
         ('q2','a') : ['q2'],
         ('q2','$') : ['q3'],
         ('q3','$') : ['q4']
-    }
+    }"""
          
 
     
