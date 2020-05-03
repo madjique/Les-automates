@@ -15,7 +15,8 @@ class AutomateEtatFini:
     def transition_to_state_with_input(self, inp):
         if (self.etat,inp)  in self.transition_function.keys() :
             self.etat =self.transition_function[(self.etat,inp)][0]
-        #self.etat = None
+        else:
+            self.etat = None
         return
     
     def in_accept_state(self):
@@ -30,6 +31,7 @@ class AutomateEtatFini:
         self.go_to_initial_state()
         for inp in input_list:
             self.transition_to_state_with_input(inp)
+            if self.etat==None: break
         return self.etat in self.etatsFinals
     pass
 
@@ -118,6 +120,8 @@ class AutomateEtatFini:
                 self.etatsFinals.add(st)
         pass
     
+
+
     def nfa_to_dfa(self) :
         ## rendre l'automate simple
         dfa=dict()
@@ -143,6 +147,7 @@ class AutomateEtatFini:
                                 etatFinal.add("".join(set(liist)))
                                 break
                         dfa["".join(etat_prec),alpha]=["".join(set(liist))]
+                        self.etats.add("".join(etat_prec))
                         liist=set(liist)
                         if liist not in dfa_list:
                             dfa_list.append(liist)  
@@ -170,8 +175,8 @@ class AutomateEtatFini:
                 
             
 
-def  afficher(etats,etatInitiale,etatFinale,Instructions) :
-    time.sleep(3)
+def afficher(etats,etatInitiale,etatFinale,Instructions) :
+    time.sleep(5)
     f = open("input.dot","w")
     #generation du text 
     DotTextToFile =" digraph { \n"
@@ -202,7 +207,7 @@ def  afficher(etats,etatInitiale,etatFinale,Instructions) :
 #__main__
 if __name__ == "__main__":    
 #initialisation des etats et de l'alphabet
-    print ("avertissement : si pour entrer plusieurs element séparer avec des espaces !")
+    '''print ("avertissement : si pour entrer plusieurs element séparer avec des espaces !")
     etats = set(input("les etat : " ).split(" "))
     alphabet =set(input("l'alphabet : ").split(" "))
     etatInitiale = set(input("etat initial : ").split(" "))
@@ -221,9 +226,14 @@ if __name__ == "__main__":
         l = input(" lecture de : ")
         etat = input("passage a l'etat : ").split(" ")
         Instructions[(e,l)]= etat
-
-
-    """Instructions = {
+    '''
+    etats = {'q0','q1','q2','q3','q4'}
+    alphabet = {'a','b','c'}
+    etatInitiale = {'q0'}
+    etatFinale = {'q4'}
+    #parametrage des instructions
+    #dictionnary
+    Instructions = {
         ('q0','a') : ['q1'],
         ('q1','c') : ['q2'],
         ('q1','$') : ['q2','q3'],
@@ -231,11 +241,14 @@ if __name__ == "__main__":
         ('q2','a') : ['q2'],
         ('q2','$') : ['q3'],
         ('q3','$') : ['q4']
-    }"""
+    }
          
 
     
     execution = AutomateEtatFini(etats, alphabet, Instructions, etatInitiale, etatFinale)
+         
+
+    
     
 
     
@@ -246,7 +259,7 @@ if __name__ == "__main__":
         print(i,'--->',j)
     print("les etats finaux : ",execution.etatsFinals)
     print("l'état initial : ",execution.etatInit)
-    #afficher(etats,etatInitiale,etatFinale,Instructions)
+    afficher(etats,etatInitiale,etatFinale,Instructions)
     
     #test NFA to DFA
     execution.nfa_to_dfa()
@@ -255,10 +268,10 @@ if __name__ == "__main__":
         print(i,'--->',j)
     print("les etats finaux : ",execution.etatsFinals)
     print("l'état initial : ",execution.etatInit)
-    #afficher(etats,etatInitiale,etatFinale,Instructions)
+    afficher(execution.etats,execution.etatInit,execution.etatsFinals,execution.transition_function)
     
     print("******Reconaissance d'un mot*******")
-    inp_program = tuple('a')
+    inp_program = tuple('abbbbbbbabbba')
     #affichage de l'execution
     print("Mot  : ","".join(inp_program))
     print("Resultat : ",execution.run_with_input_list(inp_program))
@@ -270,7 +283,7 @@ if __name__ == "__main__":
         print(i,'--->',j)
     print("les etats finaux : ",execution.etatsFinals)
     print("l'état initial : ",execution.etatInit)
-    #afficher(etats,etatInitiale,etatFinale,Instructions)
+    afficher(execution.etats,execution.etatInit,execution.etatsFinals,execution.transition_function)
     
     #transformation miroir
     execution.miroir()
@@ -279,7 +292,7 @@ if __name__ == "__main__":
         print(i,'--->',j)
     print("les etats finaux : ",execution.etatsFinals)
     print("l'état initial : ",execution.etatInit)
-    #afficher(etats,etatInitiale,etatFinale,Instructions)
+    afficher(execution.etats,execution.etatInit,execution.etatsFinals,execution.transition_function)
    
     #complement 
     execution.Complement()
@@ -288,7 +301,7 @@ if __name__ == "__main__":
         print(i,'--->',j)
     print("les etats finaux : ",execution.etatsFinals)
     print("l'état initial : ",execution.etatInit)
-    #afficher(etats,etatInitiale,etatFinale,Instructions)"""
+    afficher(execution.etats,execution.etatInit,execution.etatsFinals,execution.transition_function)
  
     
     
