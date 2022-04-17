@@ -23,5 +23,5 @@
   - Accepted / Final states
   - Transition function / Instructions
 ## Autors
-- **Mohamed Abdelmadjid Boudis @badido18**
+- **Madjid Boudis @badido18**
 - **Farouk Abdallah @farouk09**
